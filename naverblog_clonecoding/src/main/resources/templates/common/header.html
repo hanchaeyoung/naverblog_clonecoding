@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>자유게시판</title>
+    <style>
+        * {
+            margin: 0;
+        }
+
+        html,
+        body {
+            height: 100%;
+            padding: 0px;
+            margin: 0px;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+        }
+
+        nav {
+            margin-left: auto;
+        }
+
+        h1 {
+            display: inline-block;
+            vertical-align: middle;
+            color: white;
+            margin: 0.5rem;
+            padding: 0;
+            font-size: 2rem;
+        }
+
+        nav {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        li.icon {
+            flex-basis: 25%;
+        }
+
+        header {
+            height: 70px;
+            background-color: #00C73C;
+        }
+
+
+
+
+        html {
+            box-sizing: border-box;
+        }
+
+        *,
+        *:before,
+        *:after {
+            box-sizing: inherit;
+        }
+
+        #wrap {
+            min-height: calc(100% - 120px);
+            padding: 30px;
+        }
+
+
+
+        .link {
+            text-decoration-line: none;
+            color: white;
+        }
+
+        .link:hover {
+            color: #E9E8E8;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <a href="/"><h1>네이버블로그</h1></a>
+        <nav>
+            <ul>
+                <li><p sec:authorize="isAnonymous()"><a th:href="@{/login}" class="link">로그인</a></p></li>&nbsp&nbsp
+                <li><p sec:authorize="isAnonymous()"><a th:href="@{/user/add}" class="link">회원가입</a></p></li>&nbsp&nbsp
+                <li><p sec:authorize="isAuthenticated()"><a th:href="@{/logout}" class="link">로그아웃</a></p></li>&nbsp&nbsp
+            </ul>
+        </nav>
+    </header>
+</body>
+</html>

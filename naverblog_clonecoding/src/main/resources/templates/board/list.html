@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>자유게시판</title>
+    <link rel="stylesheet" href="/bootstrap-5.3.0-alpha3-dist/css/bootstrap.min.css">
+    <script src="/bootstrap-5.3.0-alpha3-dist/js/bootstrap.min.js"></script>
+</head>
+<body>
+<!-- HEADER -->
+<div th:insert="common/header.html" id="header"></div>
+
+<div id="wrap" class="container" style="width: 60%">
+    <div style="margin: 60px"></div>
+    <div id="con">
+        <div>
+            <div style="text-align: left;">
+                <button sec:authorize="isAuthenticated()" class="btn btn-default" style="background-color: #00C73C; color: white;" onclick="location.href='http://localhost:8080/post'">글쓰기</button>
+            </div>
+<!--            <div sec:authorize="isAuthenticated()" style="text-align: right;">-->
+<!--                <form action="/board/search" method="GET">-->
+<!--                    <input aria-describedby="helpBlock" name="keyword" type="text" placeholder="검색어를 입력해주세요">-->
+<!--                    <button class="btn btn-default" style="background-color: #00C73C; color: white;">검색</button>-->
+<!--                </form>-->
+<!--            </div>-->
+        </div>
+        <br>
+
+        <div>
+            <table class="table" style="text-align: center">
+                <thead>
+                <tr>
+                    <!--                    <th class="one wide">번호</th>-->
+                    <th class="ten wide" style="width: 75%">글제목</th>
+                    <th class="two wide" style="width: 10%">작성자</th>
+                    <th class="three wide" style="width: 15%">작성일</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <!-- CONTENTS !-->
+                <tr th:each="board : ${boardList}">
+                    <td>
+                        <a th:href="@{'/post/' + ${board.id}}" style="color: black">
+                            <span th:text="${board.title}" style="color: black"></span>
+                        </a>
+                    </td>
+                    <td>
+                        <span th:text="${board.writer}"></span>
+                    </td>
+                    <td>
+                        <span th:text="${#temporals.format(board.createdDate, 'yyyy-MM-dd HH:mm')}"></span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div style="text-align: center">
+                <span th:each="pageNum : ${pageList}" th:inline="text">
+                    <a th:href="@{'/?page=' + ${pageNum}}">[[${pageNum}]]</a>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<div th:insert="common/footer.html" id="footer"></div>
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/bootstrap-5.3.0-alpha3-dist/css/bootstrap.min.css">
+    <script src="/bootstrap-5.3.0-alpha3-dist/js/bootstrap.min.js"></script>
+    <style>
+        table {
+            table-layout: fixed;
+            width: 100%;
+        }
+
+        .content-cell {
+            word-wrap: break-word;
+        }
+
+        #header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+        }
+
+        .container {
+            margin-top: 150px;
+        }
+    </style>
+</head>
+<body>
+<!-- HEADER -->
+<div th:insert="common/header.html" id="header"></div>
+
+<div class="container" style="width: 60%;">
+    <div style="margin: 100px"></div>
+    <table>
+        <tr>
+            <td colspan="2"><h2 th:text="${boardDto.title}"></h2></td>
+        </tr>
+
+        <tr>
+            <td colspan="2" style="color: #7D7D7D"><span th:inline="text">작성일 : [[${#temporals.format(boardDto.createdDate, 'yyyy-MM-dd HH:mm')}]]</span></td>
+        </tr>
+        <tr>
+            <td colspan="2" style="color: #7D7D7D;">작성자 : <span th:text="${boardDto.writer}"></span></td>
+        </tr>
+
+        <tr>
+            <td colspan="2" style="height: 30px"></td>
+        </tr>
+
+        <tr>
+            <td colspan="2" class="content-cell"><span th:text="${boardDto.content}"></span></td>
+        </tr>
+
+        <tr>
+            <td colspan="2" style="height: 30px"></td>
+        </tr>
+    </table>
+
+    <div th:if="${boardDto.writer == #authentication.principal.user.id}">
+        <div style="display: flex;">
+            <a th:href="@{'/post/edit/' + ${boardDto.id}}">
+                <button class="btn btn-default" style="background-color: #00C73C; color: white; flex: 1;">수정</button>
+            </a>&nbsp;&nbsp;
+            <form id="delete-form" th:action="@{'/post/' + ${boardDto.id}}" method="post">
+                <input type="hidden" name="_method" value="delete"/>
+                <button id="delete-btn" class="btn btn-default" style="background-color: #00C73C; color: white; flex: 1;">삭제</button>
+            </form>
+        </div>
+    </div>
+
+
+    <hr>
+
+<!--    <div style="margin-top: 20px">-->
+<!--        <form th:action="@{'/post/' + ${boardDto.id}}" method="post">-->
+<!--            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">-->
+
+<!--            <div class="form-group">-->
+<!--                <input type="text" class="form-control" id="writer" name="writer" th:value="${#authentication.principal.user.id}" readonly>-->
+<!--            </div>-->
+
+<!--            <div class="form-group">-->
+<!--                <textarea class="form-control" id="content" name="content" rows="3" placeholder="댓글을 작성해주세요." maxlength="990"></textarea>-->
+<!--            </div>-->
+
+<!--            <button type="submit" class="btn btn-primary">댓글 작성</button>-->
+<!--        </form>-->
+
+<!--        <table>-->
+<!--            <tr th:each="comment : ${boardDto.comments}">-->
+<!--                <td style="width: 10%" th:text="${comment.writer}"></td>-->
+<!--                <td style="width: 83%" class="content-cell" th:text="${comment.content}" id="comment-input"></td>-->
+<!--                <td style="width: 7%; text-align: right;" th:if="${comment.writer == #authentication.principal.user.id}">-->
+<!--                    <form th:action="@{'/post/' + ${boardDto.id} + '/' + ${comment.id}}" method="post">-->
+<!--                        <input type="hidden" name="_method" value="delete"/>-->
+<!--                        <button class="btn btn-default" style="background-color: black; color: white;">삭제</button>-->
+<!--                        &lt;!&ndash;                        <button class="btn btn-default" style="width: 58px; height: 30px; background-color: black; color: white; padding: 5px;">삭제</button>&ndash;&gt;-->
+<!--                    </form>-->
+<!--                </td>-->
+<!--            </tr>-->
+<!--        </table>-->
+
+<!--        <div style="margin-top: 40px"></div>-->
+<!--    </div>-->
+</div>
+
+<!-- 변수 셋팅 -->
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var boardDto = /*[[${boardDto}]]*/ "";
+    /*]]>*/
+</script>
+
+<!-- script -->
+<script th:inline="javascript" th:src="@{/js/board.js}"></script>
+</body>
+</html>
