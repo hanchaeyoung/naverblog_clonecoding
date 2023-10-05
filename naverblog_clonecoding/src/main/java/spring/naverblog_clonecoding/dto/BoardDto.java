@@ -24,6 +24,12 @@ public class BoardDto {
     @LastModifiedDate
     private LocalDateTime modifiedDate;
 
+    private List<CommentDto> comments;
+
+    public void setComments(List<CommentDto> comments) {
+        this.comments = comments;
+    }
+
     public BoardEntity toEntity(){
         BoardEntity boardEntity = BoardEntity.builder()
                 .id(id)

@@ -13,7 +13,7 @@
 
 <div class="container">
     <div style="margin: 100px">
-        <form action="/post" method="post">
+        <form action="/post/write" method="post">
             <input type="text" name="title" maxlength="95" class="form-control" placeholder="제목을 입력하세요."> <br>
             <input type="text" name="writer" th:value="${#authentication.principal.user.id}" readonly class="form-control"><br>
             <textarea name="content" maxlength="65000" style="height: 500px" class="form-control" placeholder="내용을 입력하세요."></textarea><br>

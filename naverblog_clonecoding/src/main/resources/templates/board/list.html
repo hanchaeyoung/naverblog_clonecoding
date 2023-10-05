@@ -15,15 +15,12 @@
     <div style="margin: 60px"></div>
     <div id="con">
         <div>
-            <div style="text-align: left;">
-                <button sec:authorize="isAuthenticated()" class="btn btn-default" style="background-color: #00C73C; color: white;" onclick="location.href='http://localhost:8080/post'">글쓰기</button>
+            <div style="text-align: right;">
+                <form action="/board/search" method="GET">
+                    <input aria-describedby="helpBlock" name="keyword" type="text" placeholder="검색어를 입력해주세요">
+                    <button class="btn btn-default" style="background-color: #00C73C; color: white;">검색</button>
+                </form>
             </div>
-<!--            <div sec:authorize="isAuthenticated()" style="text-align: right;">-->
-<!--                <form action="/board/search" method="GET">-->
-<!--                    <input aria-describedby="helpBlock" name="keyword" type="text" placeholder="검색어를 입력해주세요">-->
-<!--                    <button class="btn btn-default" style="background-color: #00C73C; color: white;">검색</button>-->
-<!--                </form>-->
-<!--            </div>-->
         </div>
         <br>
 
@@ -42,7 +39,7 @@
                 <!-- CONTENTS !-->
                 <tr th:each="board : ${boardList}">
                     <td>
-                        <a th:href="@{'/post/' + ${board.id}}" style="color: black">
+                        <a th:href="@{'/post/detail/' + ${board.id}}" style="color: black">
                             <span th:text="${board.title}" style="color: black"></span>
                         </a>
                     </td>

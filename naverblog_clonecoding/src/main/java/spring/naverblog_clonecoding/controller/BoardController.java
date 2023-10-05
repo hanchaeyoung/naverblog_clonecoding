@@ -7,7 +7,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import spring.naverblog_clonecoding.dto.BoardDto;
+import spring.naverblog_clonecoding.dto.CommentDto;
 import spring.naverblog_clonecoding.service.BoardService;
+import spring.naverblog_clonecoding.service.CommentService;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -20,6 +22,7 @@ public class BoardController {
     private HttpSession httpSession;
 
     private BoardService boardService;
+    private CommentService commentService;
 
     /* 게시글 목록 */
     @GetMapping("/")
@@ -34,9 +37,13 @@ public class BoardController {
     }
 
     /* 게시글 상세 */
-    @GetMapping("/post/{no}")
+    @GetMapping("/post/detail/{no}")
     public String detail(@PathVariable("no") Long no, Model model) {
         BoardDto boardDTO = boardService.getPost(no);
+
+        /* 댓글 데이터 가져오기 */
+        List<CommentDto> comments = commentService.getCommentsByBoardId(no);
+        boardDTO.setComments(comments);
 
         model.addAttribute("boardDto", boardDTO);
         return "board/detail.html";
@@ -44,12 +51,12 @@ public class BoardController {
 
 
     /* 게시글 쓰기 */
-    @GetMapping("/post")
+    @GetMapping("/post/write")
     public String write() {
         return "board/write.html";
     }
 
-    @PostMapping("/post")
+    @PostMapping("/post/write")
     public String write(BoardDto boardDto, Authentication authentication) {
         String writer = authentication.getName(); // 현재 인증된 사용자의 이름을 가져옴
         boardDto.setWriter(writer); // 작성자를 자동으로 입력함
@@ -68,20 +75,24 @@ public class BoardController {
     }
 
     @PostMapping("/post/edit/{no}")
-    public String update(BoardDto boardDTO) {
-        boardService.savePost(boardDTO);
+    public String update(@PathVariable("no") Long no, BoardDto boardDto) {
+        boardDto.setId(no);
+
+        boardService.savePost(boardDto);
 
         return "redirect:/post/{no}";
     }
 
     /* 게시글 삭제 */
-    @DeleteMapping("/post/{no}")
+    @PostMapping("/post/delete/{no}")
     public String delete(@PathVariable("no") Long no) {
         boardService.deletePost(no);
 
         return "redirect:/";
     }
 
+
+    /* 게시글 검색 */
     @GetMapping("/board/search")
     public String search(@RequestParam(value="keyword") String keyword, Model model) {
         List<BoardDto> boardDtoList = boardService.searchPosts(keyword);
@@ -89,9 +100,5 @@ public class BoardController {
         model.addAttribute("boardList", boardDtoList);
 
         return "board/list.html";
-    }
-    @GetMapping("/login")
-    public String login(){
-        return "account/login";
     }
 }

@@ -95,6 +95,7 @@
             <ul>
                 <li><p sec:authorize="isAnonymous()"><a th:href="@{/login}" class="link">로그인</a></p></li>&nbsp&nbsp
                 <li><p sec:authorize="isAnonymous()"><a th:href="@{/user/add}" class="link">회원가입</a></p></li>&nbsp&nbsp
+                <li><p sec:authorize="isAuthenticated()"><a th:href="@{/post}" class="link">글쓰기</a></p></li>&nbsp&nbsp
                 <li><p sec:authorize="isAuthenticated()"><a th:href="@{/logout}" class="link">로그아웃</a></p></li>&nbsp&nbsp
             </ul>
         </nav>

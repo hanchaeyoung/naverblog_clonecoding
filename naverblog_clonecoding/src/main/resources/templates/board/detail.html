@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -58,14 +58,14 @@
         </tr>
     </table>
 
-    <div th:if="${boardDto.writer == #authentication.principal.user.id}">
+    <div sec:authorize="isAuthenticated()" th:if="${boardDto.writer == #authentication.principal.user.id}">
         <div style="display: flex;">
             <a th:href="@{'/post/edit/' + ${boardDto.id}}">
-                <button class="btn btn-default" style="background-color: #00C73C; color: white; flex: 1;">수정</button>
+                <button class="btn btn-default" style="background-color: black; color: white; flex: 1;">수정</button>
             </a>&nbsp;&nbsp;
-            <form id="delete-form" th:action="@{'/post/' + ${boardDto.id}}" method="post">
+            <form id="delete-form" th:action="@{'/post/delete/' + ${boardDto.id}}" method="post">
                 <input type="hidden" name="_method" value="delete"/>
-                <button id="delete-btn" class="btn btn-default" style="background-color: #00C73C; color: white; flex: 1;">삭제</button>
+                <button id="delete-btn" class="btn btn-default" style="background-color: black; color: white; flex: 1;">삭제</button>
             </form>
         </div>
     </div>
@@ -73,37 +73,37 @@
 
     <hr>
 
-<!--    <div style="margin-top: 20px">-->
-<!--        <form th:action="@{'/post/' + ${boardDto.id}}" method="post">-->
-<!--            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">-->
+    <div style="margin-top: 20px">
+        <form sec:authorize="isAuthenticated()" th:action="@{'/post/detail/' + ${boardDto.id}}" method="post">
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 
-<!--            <div class="form-group">-->
-<!--                <input type="text" class="form-control" id="writer" name="writer" th:value="${#authentication.principal.user.id}" readonly>-->
-<!--            </div>-->
+            <div class="form-group">
+                <input type="text" class="form-control" id="writer" name="writer" th:value="${#authentication.principal.user.id}" readonly>
+            </div>
 
-<!--            <div class="form-group">-->
-<!--                <textarea class="form-control" id="content" name="content" rows="3" placeholder="댓글을 작성해주세요." maxlength="990"></textarea>-->
-<!--            </div>-->
+            <div class="form-group">
+                <textarea class="form-control" id="content" name="content" rows="3" placeholder="댓글을 작성해주세요." maxlength="990"></textarea>
+            </div>
 
-<!--            <button type="submit" class="btn btn-primary">댓글 작성</button>-->
-<!--        </form>-->
+            <button type="submit" class="btn btn-primary">댓글 작성</button>
+        </form>
 
-<!--        <table>-->
-<!--            <tr th:each="comment : ${boardDto.comments}">-->
-<!--                <td style="width: 10%" th:text="${comment.writer}"></td>-->
-<!--                <td style="width: 83%" class="content-cell" th:text="${comment.content}" id="comment-input"></td>-->
-<!--                <td style="width: 7%; text-align: right;" th:if="${comment.writer == #authentication.principal.user.id}">-->
-<!--                    <form th:action="@{'/post/' + ${boardDto.id} + '/' + ${comment.id}}" method="post">-->
-<!--                        <input type="hidden" name="_method" value="delete"/>-->
-<!--                        <button class="btn btn-default" style="background-color: black; color: white;">삭제</button>-->
-<!--                        &lt;!&ndash;                        <button class="btn btn-default" style="width: 58px; height: 30px; background-color: black; color: white; padding: 5px;">삭제</button>&ndash;&gt;-->
-<!--                    </form>-->
-<!--                </td>-->
-<!--            </tr>-->
-<!--        </table>-->
+        <table>
+            <tr th:each="comment : ${boardDto.comments}">
+                <td style="width: 10%" th:text="${comment.writer}"></td>
+                <td style="width: 83%" class="content-cell" th:text="${comment.content}" id="comment-input"></td>
+                <td style="width: 7%; text-align: right;" sec:authorize="isAuthenticated()" th:if="${comment.writer == #authentication.principal.user.id}">
+                    <form th:action="@{'/post/' + ${boardDto.id} + '/' + ${comment.id}}" method="post">
+                        <input type="hidden" name="_method" value="delete"/>
+                        <button class="btn btn-default" style="background-color: black; color: white;">삭제</button>
+                        <!--                        <button class="btn btn-default" style="width: 58px; height: 30px; background-color: black; color: white; padding: 5px;">삭제</button>-->
+                    </form>
+                </td>
+            </tr>
+        </table>
 
-<!--        <div style="margin-top: 40px"></div>-->
-<!--    </div>-->
+        <div style="margin-top: 40px"></div>
+    </div>
 </div>
 
 <!-- 변수 셋팅 -->
