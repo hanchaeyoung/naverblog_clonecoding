@@ -80,7 +80,7 @@ public class BoardController {
 
         boardService.savePost(boardDto);
 
-        return "redirect:/post/{no}";
+        return "redirect:/post/detail/{no}";
     }
 
     /* 게시글 삭제 */
