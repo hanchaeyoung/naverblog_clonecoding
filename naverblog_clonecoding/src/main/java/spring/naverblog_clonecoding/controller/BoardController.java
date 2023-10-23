@@ -101,4 +101,13 @@ public class BoardController {
 
         return "board/list.html";
     }
+
+    /* 내 게시글 */
+    @GetMapping("/board/my")
+    public String myPage(Authentication authentication, Model model) {
+        String username = authentication.getName(); // 현재 인증된 사용자의 이름을 가져옴
+        List<BoardDto> myPosts = boardService.getMyPosts(username);
+        model.addAttribute("myPosts", myPosts);
+        return "board/myList.html";
+    }
 }

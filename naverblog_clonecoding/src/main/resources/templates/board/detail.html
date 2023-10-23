@@ -2,7 +2,7 @@
 <html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>네이버블로그</title>
     <link rel="stylesheet" href="/bootstrap-5.3.0-alpha3-dist/css/bootstrap.min.css">
     <script src="/bootstrap-5.3.0-alpha3-dist/js/bootstrap.min.js"></script>
     <style>
@@ -95,7 +95,7 @@
                 <td style="width: 7%; text-align: right;" sec:authorize="isAuthenticated()" th:if="${comment.writer == #authentication.principal.user.id}">
                     <form th:action="@{'/post/detail/' + ${boardDto.id} + '/' + ${comment.id}}" method="post">
                         <input type="hidden" name="_method" value="delete"/>
-                        <button class="btn btn-default" style="background-color: black; color: white;">삭제</button>
+                        <button class="btn btn-default" style="background-color: #00C73C; border-color: #00C73C; color: white;">삭제</button>
                         <!--                        <button class="btn btn-default" style="width: 58px; height: 30px; background-color: black; color: white; padding: 5px;">삭제</button>-->
                     </form>
                 </td>

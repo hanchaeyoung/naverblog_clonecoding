@@ -17,7 +17,7 @@ public class CommentEntity {
 
     private String writer;
 
-    @Column(length = 1000)
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)

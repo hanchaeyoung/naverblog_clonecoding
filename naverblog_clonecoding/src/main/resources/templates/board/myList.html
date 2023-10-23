@@ -15,12 +15,6 @@
     <div id="con">
         <div>
             <div style="text-align: right;">
-                <form action="/board/search" method="GET">
-                    <input aria-describedby="helpBlock" name="keyword" type="text" placeholder="검색어를 입력해주세요">
-                    <button class="btn btn-default" style="background-color: #00C73C; color: white;">검색</button>
-                </form>
-            </div>
-            <div style="text-align: right;">
                 <input type="radio" name="sortType" value="newest" checked> 최신 순
                 <input type="radio" name="sortType" value="oldest"> 오래된 순
                 <input type="radio" name="sortType" value="ascTitle"> 제목 오름차순
@@ -34,25 +28,38 @@
             <table class="table" style="text-align: center">
                 <thead>
                 <tr>
-                    <th class="ten wide" style="width: 75%">글제목</th>
+                    <th class="ten wide" style="width: 55%">글제목</th>
                     <th class="two wide" style="width: 10%">작성자</th>
                     <th class="three wide" style="width: 15%">작성일</th>
+                    <th class="three wide" style="width: 10%">수정</th>
+                    <th class="three wide" style="width: 10%">삭제</th>
                 </tr>
                 </thead>
 
                 <tbody>
                 <!-- CONTENTS !-->
-                <tr th:each="board : ${boardList}" th:attr="data-board=${board.id}, data-createdDate=${#temporals.format(board.createdDate, 'yyyy-MM-dd HH:mm')}">
+                <tr th:each="post : ${myPosts}" th:attr="data-board=${post.id}, data-createdDate=${#temporals.format(post.createdDate, 'yyyy-MM-dd HH:mm')}">
                     <td>
-                        <a th:href="@{'/post/detail/' + ${board.id}}" style="color: black">
-                            <span th:text="${board.title}" style="color: black"></span>
+                        <a th:href="@{'/post/detail/' + ${post.id}}" style="color: black">
+                            <span th:text="${post.title}" style="color: black"></span>
                         </a>
                     </td>
                     <td>
-                        <span th:text="${board.writer}"></span>
+                        <span th:text="${post.writer}"></span>
                     </td>
                     <td>
-                        <span th:text="${#temporals.format(board.createdDate, 'yyyy-MM-dd HH:mm')}"></span>
+                        <span th:text="${#temporals.format(post.createdDate, 'yyyy-MM-dd HH:mm')}"></span>
+                    </td>
+                    <td>
+                        <a th:href="@{'/post/edit/' + ${post.id}}">
+                            <button class="btn btn-default" style="background-color: #00C73C; border-color: #00C73C; color: white; flex: 1;">수정</button>
+                        </a>
+                    </td>
+                    <td>
+                        <form id="delete-form" th:action="@{'/post/delete/' + ${post.id}}" method="post">
+                            <input type="hidden" name="_method" value="delete"/>
+                            <button id="delete-btn" class="btn btn-default" style="background-color: #00C73C; border-color: #00C73C; color: white; flex: 1;">삭제</button>
+                        </form>
                     </td>
                 </tr>
                 </tbody>

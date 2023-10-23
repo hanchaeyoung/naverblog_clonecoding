@@ -111,4 +111,16 @@ public class BoardService {
                 .createdDate(boardEntity.getCreatedDate())
                 .build();
     }
+
+    @Transactional
+    public List<BoardDto> getMyPosts(String username) {
+        List<BoardEntity> boardEntities = boardRepository.findByWriter(username);
+        List<BoardDto> boardDtoList = new ArrayList<>();
+
+        for (BoardEntity boardEntity : boardEntities) {
+            boardDtoList.add(this.convertEntityToDto(boardEntity));
+        }
+
+        return boardDtoList;
+    }
 }
