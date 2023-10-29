@@ -50,13 +50,14 @@
         </tr>
 
         <tr>
-            <td>
-                <img th:src="${boardDto.getImgPath()}" width="100px">
+            <td colspan="2">
+                <img th:src="${boardDto.getImgPath()}" style="width: 100%">
             </td>
         </tr>
 
         <tr>
-            <td colspan="2" class="content-cell"><span th:text="${boardDto.content}"></span></td>
+<!--            <td colspan="2" class="content-cell"><span th:text="${boardDto.content}"></span></td>-->
+            <td colspan="2"><div th:utext="${boardDto.content.replace('\n', '<br>')}" ></div></td>
         </tr>
 
         <tr>
@@ -108,7 +109,7 @@
             </tr>
         </table>
 
-        <div style="margin-top: 40px"></div>
+        <div style="height: 60px"></div>
     </div>
 </div>
 

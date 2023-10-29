@@ -5,6 +5,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import spring.naverblog_clonecoding.entity.BoardEntity;
 
+import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -19,10 +20,16 @@ public class BoardDto {
     private String writer;
     private String title;
     private String content;
+
+    @Column(columnDefinition = "TEXT")
     private String imgName; // 이미지 파일명
+
+    @Column(columnDefinition = "TEXT")
     private String imgPath; // 이미지 조회 경로
+
     @CreatedDate
     private LocalDateTime createdDate;
+
     @LastModifiedDate
     private LocalDateTime modifiedDate;
 

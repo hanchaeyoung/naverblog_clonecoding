@@ -13,7 +13,7 @@
 
 <div class="container">
     <div style="margin: 100px">
-        <form th:action="@{'/post/edit/' + ${boardDto.id}}" enctype="multipart/form-data" method="post">
+        <form th:action="@{'/post/edit/' + ${boardDto.id}}" enctype="multipart/form-data" method="post" onsubmit="convertLineBreaks()">
             <input type="hidden" name="_method" value="put"/>
             <input type="hidden" name="id" th:value="${boardDto.id}"/>
             <input type="hidden" name="existingImg" th:value="${boardDto.imgName}" />
@@ -28,4 +28,23 @@
     </div>
 </div>
 </body>
+<script>
+    // 페이지가 로드될 때 호출되는 함수
+    window.onload = function() {
+        // <textarea> 요소 가져오기
+        var textarea = document.querySelector('textarea[name="content"]');
+        // HTML 엔터티로 인코딩된 줄 바꿈 문자를 줄 바꿈 문자로 변환하여 설정
+        textarea.innerHTML = textarea.innerHTML
+            .replace(/&lt;br&gt;/g, '\n')
+            .replace(/&lt;/g, '<')
+            .replace(/&gt;/g, '>');
+    }
+
+    function convertLineBreaks() {
+        var textarea = document.querySelector('textarea[name="content"]');
+        var content = textarea.value;
+        var convertedContent = content.replace(/\n/g, '<br>');
+        textarea.value = convertedContent;
+    }
+</script>
 </html>

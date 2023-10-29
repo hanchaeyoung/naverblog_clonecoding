@@ -28,8 +28,10 @@ public class BoardEntity extends TimeEntity {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
+    @Column(columnDefinition = "TEXT")
     private String imgName; // 이미지 파일명
 
+    @Column(columnDefinition = "TEXT")
     private String imgPath; // 이미지 조회 경로
 
     @CreatedDate
