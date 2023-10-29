@@ -6,12 +6,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import spring.naverblog_clonecoding.dto.BoardDto;
 import spring.naverblog_clonecoding.dto.CommentDto;
+import spring.naverblog_clonecoding.entity.BoardEntity;
 import spring.naverblog_clonecoding.service.BoardService;
 import spring.naverblog_clonecoding.service.CommentService;
 
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -56,12 +59,40 @@ public class BoardController {
         return "board/write.html";
     }
 
+//    @PostMapping("/post/write")
+//    public String write(BoardEntity boardEntity, Authentication authentication, MultipartFile imgFile) {
+//        try {
+//            String writer = authentication.getName();
+//            boardEntity.setWriter(writer);
+//            boardService.savePhoto(boardEntity, imgFile);
+//            return "redirect:/";
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            return "error_page";
+//        }
+//    }
+
     @PostMapping("/post/write")
-    public String write(BoardDto boardDto, Authentication authentication) {
-        String writer = authentication.getName(); // 현재 인증된 사용자의 이름을 가져옴
-        boardDto.setWriter(writer); // 작성자를 자동으로 입력함
-        boardService.savePost(boardDto); // 게시글을 저장함
-        return "redirect:/";
+    public String write(BoardEntity boardEntity, Authentication authentication, MultipartFile imgFile) {
+        try {
+            String writer = authentication.getName();
+            boardEntity.setWriter(writer);
+
+            // 기존 이미지 파일명을 빈 문자열로 초기화
+            String existingImg = "";
+
+            // 이미지를 업로드한 경우, 기존 이미지 파일명을 가져옴
+            if (boardEntity.getId() != null) {
+                BoardDto existingBoardDto = boardService.getPost(boardEntity.getId());
+                existingImg = existingBoardDto.getImgName();
+            }
+
+            boardService.savePhoto(boardEntity, imgFile, existingImg);
+            return "redirect:/";
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "error_page";
+        }
     }
 
 
@@ -74,13 +105,31 @@ public class BoardController {
         return "board/update.html";
     }
 
+//    @PostMapping("/post/edit/{no}")
+//    public String update(@PathVariable("no") Long no, BoardDto boardDto) {
+//        boardDto.setId(no);
+//
+//        boardService.savePost(boardDto);
+//
+//        return "redirect:/post/detail/{no}";
+//    }
+
     @PostMapping("/post/edit/{no}")
-    public String update(@PathVariable("no") Long no, BoardDto boardDto) {
+    public String update(@PathVariable("no") Long no, BoardDto boardDto, @RequestParam("imgFile") MultipartFile imgFile) {
         boardDto.setId(no);
 
-        boardService.savePost(boardDto);
+        // 기존 이미지 파일명을 가져옴
+        BoardDto existingBoardDto = boardService.getPost(no);
+        String existingImg = existingBoardDto.getImgName();
 
-        return "redirect:/post/detail/{no}";
+        // 이미지 수정 메소드 호출
+        try {
+            boardService.savePhoto(boardDto.toEntity(), imgFile, existingImg);
+            return "redirect:/post/detail/" + no;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "error_page";
+        }
     }
 
     /* 게시글 삭제 */

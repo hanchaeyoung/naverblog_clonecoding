@@ -19,6 +19,8 @@ public class BoardDto {
     private String writer;
     private String title;
     private String content;
+    private String imgName; // 이미지 파일명
+    private String imgPath; // 이미지 조회 경로
     @CreatedDate
     private LocalDateTime createdDate;
     @LastModifiedDate
@@ -36,16 +38,20 @@ public class BoardDto {
                 .writer(writer)
                 .title(title)
                 .content(content)
+                .imgName(imgName)
+                .imgPath(imgPath)
                 .build();
         return boardEntity;
     }
 
     @Builder
-    public BoardDto(Long id, String title, String content, String writer, LocalDateTime createdDate, LocalDateTime modifiedDate) {
+    public BoardDto(Long id, String title, String content, String writer, String imgName, String imgPath, LocalDateTime createdDate, LocalDateTime modifiedDate) {
         this.id = id;
         this.writer = writer;
         this.title = title;
         this.content = content;
+        this.imgName = imgName;
+        this.imgPath = imgPath;
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;
     }

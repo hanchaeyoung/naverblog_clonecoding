@@ -28,6 +28,10 @@ public class BoardEntity extends TimeEntity {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
+    private String imgName; // 이미지 파일명
+
+    private String imgPath; // 이미지 조회 경로
+
     @CreatedDate
     private LocalDateTime createdDate;
 
@@ -35,11 +39,13 @@ public class BoardEntity extends TimeEntity {
     private LocalDateTime modifiedDate;
 
     @Builder
-    public BoardEntity(Long id, String title, String content, String writer, LocalDateTime createdDate, LocalDateTime modifiedDate) {
+    public BoardEntity(Long id, String title, String content, String writer, String imgName, String imgPath, LocalDateTime createdDate, LocalDateTime modifiedDate) {
         this.id = id;
         this.writer = writer;
         this.title = title;
         this.content = content;
+        this.imgName = imgName;
+        this.imgPath = imgPath;
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;
     }

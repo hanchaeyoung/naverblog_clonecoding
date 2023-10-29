@@ -6,14 +6,18 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import spring.naverblog_clonecoding.dto.BoardDto;
 import spring.naverblog_clonecoding.entity.BoardEntity;
 import spring.naverblog_clonecoding.repository.BoardRepository;
 
 import javax.transaction.Transactional;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @AllArgsConstructor
 @Service
@@ -108,6 +112,8 @@ public class BoardService {
                 .title(boardEntity.getTitle())
                 .content(boardEntity.getContent())
                 .writer(boardEntity.getWriter())
+                .imgName(boardEntity.getImgName())
+                .imgPath(boardEntity.getImgPath())
                 .createdDate(boardEntity.getCreatedDate())
                 .build();
     }
@@ -122,5 +128,56 @@ public class BoardService {
         }
 
         return boardDtoList;
+    }
+
+//    /* 이미지 저장 */
+//    public void savePhoto(BoardEntity boardEntity, MultipartFile imgFile) throws IOException {
+//
+//        String oriImgName = imgFile.getOriginalFilename();
+//        String imgName = "";
+//
+//        String projectPath = System.getProperty("user.dir") + "/src/main/resources/static/files/";
+//
+//        // UUID 를 이용하여 파일명 새로 생성
+//        // UUID - 서로 다른 객체들을 구별하기 위한 클래스
+//        UUID uuid = UUID.randomUUID();
+//
+//        String savedFileName = uuid + "_" + oriImgName; // 파일명 -> imgName
+//
+//        imgName = savedFileName;
+//
+//        File saveFile = new File(projectPath, imgName);
+//
+//        imgFile.transferTo(saveFile);
+//
+//        boardEntity.setImgName(imgName);
+//        boardEntity.setImgPath("/files/" + imgName);
+//
+//        boardRepository.save(boardEntity);
+//    }
+
+    public void savePhoto(BoardEntity boardEntity, MultipartFile imgFile, String existingImg) throws IOException {
+        // 기존 이미지를 삭제하지 않고, 새 이미지가 업로드되면 그것을 사용하도록 변경
+        String imgName = existingImg;
+
+        String projectPath = System.getProperty("user.dir") + "/src/main/resources/static/files/";
+
+        if (imgFile != null && !imgFile.isEmpty()) {
+            String oriImgName = imgFile.getOriginalFilename();
+
+            // UUID를 이용하여 파일명 생성
+            UUID uuid = UUID.randomUUID();
+            String savedFileName = uuid + "_" + oriImgName;
+
+            imgName = savedFileName;
+
+            File saveFile = new File(projectPath, imgName);
+            imgFile.transferTo(saveFile);
+        }
+
+        boardEntity.setImgName(imgName);
+        boardEntity.setImgPath("/files/" + imgName);
+
+        boardRepository.save(boardEntity);
     }
 }
